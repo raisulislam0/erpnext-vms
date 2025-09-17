@@ -18,7 +18,10 @@ class VehicleEntry(Document):
         self.update_status_from_linked_docs()
 
     def on_cancel(self):
-        self.status = "Cancelled"
+        self.status = "Rollback"
+        # Update status in all related docs
+        if self.chassis_number:
+            update_related_docs_status(self.chassis_number, "Rollback")
 
     def update_status_from_linked_docs(self):
         if self.docstatus != 1:
@@ -62,5 +65,27 @@ def update_vehicle_entry_status(doc, method=None):
         
         if vehicle_entry:
             ve_doc = frappe.get_doc("Vehicle Entry", vehicle_entry)
+            old_status = ve_doc.status
             ve_doc.update_status_from_linked_docs()
-            ve_doc.db_set("status", ve_doc.status)
+            
+            if old_status != ve_doc.status:
+                ve_doc.db_set("status", ve_doc.status)
+                # Update status in all related docs
+                update_related_docs_status(doc.chassis_number, ve_doc.status)
+                frappe.db.commit()
+
+def update_related_docs_status(chassis_number, new_status):
+    """Update status in Vehicle Availability and Vehicle Price"""
+    # Update Vehicle Availability
+    frappe.db.sql("""
+        UPDATE `tabVehicle Availability` 
+        SET status = %s 
+        WHERE chassis_number = %s
+    """, (new_status, chassis_number))
+    
+    # Update Vehicle Price  
+    frappe.db.sql("""
+        UPDATE `tabVehicle Price` 
+        SET status = %s 
+        WHERE chassis_number = %s
+    """, (new_status, chassis_number))

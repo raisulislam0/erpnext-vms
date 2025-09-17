@@ -24,7 +24,10 @@
   "price_totals_section",
   "grand_total",
   "in_words",
-  "amended_from"
+  "amended_from",
+  "state_info_tab",
+  "state_info_section",
+  "status"
  ],
  "fields": [
   {
@@ -159,13 +162,32 @@
    "in_list_view": 1,
    "label": "Availability Status",
    "read_only": 1
+  },
+  {
+   "fieldname": "state_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "State Info"
+  },
+  {
+   "fieldname": "state_info_section",
+   "fieldtype": "Section Break",
+   "label": "State Info"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nRollback",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-17 14:07:43.637118",
+ "modified": "2025-09-17 14:54:59.400379",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

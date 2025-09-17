@@ -16,7 +16,7 @@ frappe.ui.form.on('Vehicle Entry', {
                     frm.add_custom_button(__('Availability'), function() {
                         frappe.new_doc('Vehicle Availability', {
                             chassis_number: frm.doc.chassis_number,
-                            vehicle_name: frm.doc.vehicle_name,
+                            car_model : frm.doc.car_model,
                             model_year: frm.doc.model_year,
                             shape: frm.doc.shape,
                             auction_grade: frm.doc.auction_grade,
@@ -38,9 +38,9 @@ frappe.ui.form.on('Vehicle Entry', {
                     frm.add_custom_button(__('Price'), function() {
                         frappe.new_doc('Vehicle Price', {
                             chassis_number: frm.doc.chassis_number,
-                            vehicle_name: frm.doc.vehicle_name,
+                            car_model: frm.doc.car_model,
                             model_year: frm.doc.model_year,
-                            current_status: frm.doc.status
+                            status: frm.doc.status
                         });
                     }, __('Create'));
                 }

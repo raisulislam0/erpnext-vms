@@ -1,4 +1,49 @@
 frappe.ui.form.on('Vehicle Price', {
+    refresh: function(frm) {
+        // Set status indicator with colors based on status
+        if (frm.doc.status) {
+            let color = get_status_color(frm.doc.status);
+            frm.page.set_indicator(__(frm.doc.status), color);
+        }
+    },
+    
+    after_save: function(frm) {
+        // Refresh form to show updated status after a delay
+        setTimeout(() => {
+            frm.reload_doc();
+        }, 2000);
+    },
+    
+    chassis_number: function(frm) {
+        if (frm.doc.chassis_number) {
+            // Auto-fetch vehicle details from Vehicle Entry
+            frappe.db.get_doc('Vehicle Entry', frm.doc.chassis_number).then(r => {
+                if (r) {
+                    frm.set_value('car_model', r.car_model);
+                    frm.set_value('model_year', r.model_year);
+                    frm.set_value('status', r.status);
+                }
+            });
+            
+            // Fetch availability status from Vehicle Availability
+            frappe.db.get_list("Vehicle Availability", {
+                fields: ["availability_status"],
+                filters: { chassis_number: frm.doc.chassis_number },
+                order_by: "creation desc",
+                limit: 1
+            }).then(r => {
+                if (r && r.length > 0) {
+                    frm.set_value("availability_status", r[0].availability_status);
+                } else {
+                    frm.set_value("availability_status", "");
+                    frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
+                }
+            });
+        } else {
+            frm.set_value("availability_status", "");
+        }
+    },
+    
     company_price: function(frm) {
         update_totals(frm);
     },
@@ -7,26 +52,7 @@ frappe.ui.form.on('Vehicle Price', {
     },
     onload: function(frm) {
         update_totals(frm);
-    },
-    chassis_number: function(frm) {
-    if (frm.doc.chassis_number) {
-        frappe.db.get_list("Vehicle Availability", {
-            fields: ["availability_status"],
-            filters: { chassis_number: frm.doc.chassis_number },
-            order_by: "creation desc",
-            limit: 1
-        }).then(r => {
-            if (r && r.length > 0) {
-                frm.set_value("availability_status", r[0].availability_status);
-            } else {
-                frm.set_value("availability_status", "");
-                frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
-            }
-        });
-    } else {
-        frm.set_value("availability_status", "");
     }
-}
 });
 
 frappe.ui.form.on('Vehicle Price Item', {
@@ -81,5 +107,18 @@ function update_totals(frm) {
 
     // Grand Total = Sale Price + Total Amount
     frm.set_value("grand_total", sale_price + total_amt);
+}
+
+function get_status_color(status) {
+    const status_colors = {
+        'Draft': 'red',
+        'To Availability and To Price': 'orange',
+        'To Price': 'yellow', 
+        'Pending Availability': 'blue',
+        'Completed': 'green',
+        'Rollback': 'red',
+        'Cancelled': 'red'
+    };
+    return status_colors[status] || 'gray';
 }
 

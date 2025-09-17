@@ -25,7 +25,10 @@
   "mileage",
   "engine_capacity_cc",
   "description",
-  "amended_from"
+  "amended_from",
+  "state_info_tab",
+  "state_info_section",
+  "status"
  ],
  "fields": [
   {
@@ -116,7 +119,7 @@
    "search_index": 1
   },
   {
-   "depends_on": "eval:doc.current_status==\"Port\";\n",
+   "depends_on": "eval:doc.availability_status==\"Port\";\n",
    "fieldname": "port_location",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -124,31 +127,31 @@
    "options": "Port Location"
   },
   {
-   "depends_on": "eval:doc.current_status==\"Onship\";\n",
+   "depends_on": "eval:doc.availability_status==\"Onship\";\n",
    "fieldname": "ship_details",
    "fieldtype": "Small Text",
    "label": "Ship Details"
   },
   {
-   "depends_on": "eval:doc.current_status==\"Showroom\";\n",
+   "depends_on": "eval:doc.availability_status==\"Showroom\";\n",
    "fieldname": "showroom_address",
    "fieldtype": "Small Text",
    "label": "Showroom Address"
   },
   {
-   "depends_on": "eval:doc.current_status==\"Warehouse\";\n",
+   "depends_on": "eval:doc.availability_status==\"Warehouse\";\n",
    "fieldname": "warehouse_address",
    "fieldtype": "Small Text",
    "label": "Warehouse Address"
   },
   {
-   "depends_on": "eval:doc.current_status==\"Other\";\n",
+   "depends_on": "eval:doc.availability_status==\"Other\";\n",
    "fieldname": "others_details",
    "fieldtype": "Small Text",
    "label": "Others Details"
   },
   {
-   "depends_on": "eval:doc.current_status == 'Port';",
+   "depends_on": "eval:doc.availability_status == 'Port';",
    "fieldname": "shed_number",
    "fieldtype": "Small Text",
    "label": "Shed Number"
@@ -173,13 +176,32 @@
    "options": "\nPort\nOnship\nShowroom\nWarehouse\nOther",
    "print_hide": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "state_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "State Info "
+  },
+  {
+   "fieldname": "state_info_section",
+   "fieldtype": "Section Break",
+   "label": "State Info"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nRollback",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-17 13:58:52.445759",
+ "modified": "2025-09-17 15:13:51.916412",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Availability",

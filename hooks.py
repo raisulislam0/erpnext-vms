@@ -4,6 +4,18 @@ app_publisher = "Raisul Islam"
 app_description = "Tracks Vehicle details, stock, and price"
 app_email = "raisul.fusion@gmail.com"
 app_license = "mit"
+app_include_icons = "/home/fusion/frappe-bench/apps/vehicle_management/vehicle_management/public/icons/car.svg"
+
+doc_events = {
+    "Vehicle Availability": {
+        "on_submit": "vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry.update_vehicle_entry_status",
+        "on_cancel": "vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry.update_vehicle_entry_status"
+    },
+    "Vehicle Price": {
+        "on_submit": "vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry.update_vehicle_entry_status",
+        "on_cancel": "vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry.update_vehicle_entry_status"
+    }
+}
 
 # Apps
 # ------------------
