@@ -1,0 +1,207 @@
+{
+ "actions": [],
+ "autoname": "field:chassis_number",
+ "creation": "2025-09-16 12:14:30.207974",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_7mxd",
+  "posting_date",
+  "chassis_number",
+  "current_status",
+  "port_location",
+  "shed_number",
+  "ship_details",
+  "showroom_address",
+  "warehouse_address",
+  "others_details",
+  "vehicle_details_section",
+  "car_model",
+  "model_year",
+  "shape",
+  "auction_grade",
+  "column_break_oycr",
+  "color",
+  "mileage",
+  "engine_capacity_cc",
+  "description",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_7mxd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vehicle_details_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Details"
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.model_year",
+   "fieldname": "model_year",
+   "fieldtype": "Int",
+   "label": "Model Year",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.car_model",
+   "fieldname": "car_model",
+   "fieldtype": "Data",
+   "label": "Car Model",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.shape",
+   "fieldname": "shape",
+   "fieldtype": "Data",
+   "label": "Shape",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.auction_grade",
+   "fieldname": "auction_grade",
+   "fieldtype": "Data",
+   "label": "Auction Grade",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_oycr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.color",
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Color",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.mileage",
+   "fieldname": "mileage",
+   "fieldtype": "Data",
+   "label": "Mileage",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.engine_capacity",
+   "fieldname": "engine_capacity_cc",
+   "fieldtype": "Data",
+   "label": "Engine Capacity (CC)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_chassis_number.description",
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Availability",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "depends_on": "eval:doc.current_status==\"Port\";\n",
+   "fieldname": "port_location",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Port Location",
+   "options": "Port Location"
+  },
+  {
+   "depends_on": "eval:doc.current_status==\"Onship\";\n",
+   "fieldname": "ship_details",
+   "fieldtype": "Small Text",
+   "label": "Ship Details"
+  },
+  {
+   "depends_on": "eval:doc.current_status==\"Showroom\";\n",
+   "fieldname": "showroom_address",
+   "fieldtype": "Small Text",
+   "label": "Showroom Address"
+  },
+  {
+   "depends_on": "eval:doc.current_status==\"Warehouse\";\n",
+   "fieldname": "warehouse_address",
+   "fieldtype": "Small Text",
+   "label": "Warehouse Address"
+  },
+  {
+   "depends_on": "eval:doc.current_status==\"Other\";\n",
+   "fieldname": "others_details",
+   "fieldtype": "Small Text",
+   "label": "Others Details"
+  },
+  {
+   "depends_on": "eval:doc.current_status == 'Port';",
+   "fieldname": "shed_number",
+   "fieldtype": "Small Text",
+   "label": "Shed Number"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "chassis_number",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Chassis Number",
+   "options": "Vehicle Entry",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Current Status",
+   "no_copy": 1,
+   "options": "\nPort\nOnship\nShowroom\nWarehouse\nOther",
+   "print_hide": 1,
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-17 11:13:05.200166",
+ "modified_by": "Administrator",
+ "module": "Vehicle Management",
+ "name": "Vehicle Availability",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

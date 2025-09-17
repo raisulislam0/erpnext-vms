@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "autoname": "field:chassis_number",
+ "creation": "2025-09-17 10:35:57.642805",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_wocd",
+  "chassis_number",
+  "car_model",
+  "model_year",
+  "shape",
+  "auction_grade",
+  "package",
+  "column_break_zpbz",
+  "color",
+  "mileage",
+  "cc",
+  "seat_capacity",
+  "country_of_origin",
+  "description",
+  "amended_from",
+  "state_info_tab",
+  "state_info_section",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_wocd",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Entry Form"
+  },
+  {
+   "fieldname": "chassis_number",
+   "fieldtype": "Data",
+   "label": "Chassis Number",
+   "no_copy": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "car_model",
+   "fieldtype": "Link",
+   "label": "Car Model",
+   "options": "Car Model",
+   "reqd": 1
+  },
+  {
+   "fieldname": "model_year",
+   "fieldtype": "Link",
+   "label": "Model Year",
+   "options": "Model Year",
+   "reqd": 1
+  },
+  {
+   "default": "New",
+   "fieldname": "shape",
+   "fieldtype": "Select",
+   "label": "Shape",
+   "options": "New\nOld"
+  },
+  {
+   "fieldname": "auction_grade",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Auction Grade",
+   "options": "Auction Grade"
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Small Text",
+   "label": "Package"
+  },
+  {
+   "fieldname": "column_break_zpbz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Link",
+   "label": "Color",
+   "options": "Color"
+  },
+  {
+   "fieldname": "mileage",
+   "fieldtype": "Data",
+   "label": "Mileage"
+  },
+  {
+   "default": "4",
+   "fieldname": "seat_capacity",
+   "fieldtype": "Select",
+   "label": "Seat Capacity",
+   "options": "2\n4\n6\n8\n10"
+  },
+  {
+   "fieldname": "country_of_origin",
+   "fieldtype": "Link",
+   "label": "Country of Origin",
+   "options": "Country"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Entry",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "cc",
+   "fieldtype": "Data",
+   "label": "Engine Capacity"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nRollback",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "state_info_section",
+   "fieldtype": "Section Break",
+   "label": "State Info"
+  },
+  {
+   "fieldname": "state_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "State Info "
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-17 11:40:11.774926",
+ "modified_by": "Administrator",
+ "module": "Vehicle Management",
+ "name": "Vehicle Entry",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,177 @@
+{
+ "actions": [],
+ "autoname": "Pr-.YYYY.-.#####",
+ "creation": "2025-09-16 14:57:32.225112",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "vehicle_info_section",
+  "posting_date",
+  "chassis_number",
+  "current_status",
+  "column_break_tejs",
+  "car_model",
+  "model_year",
+  "color",
+  "auction_grade",
+  "section_break_qrbv",
+  "company_price",
+  "customer_price",
+  "sale_price",
+  "vehicle_items",
+  "total_quantity",
+  "total_amount",
+  "price_totals_section",
+  "grand_total",
+  "in_words"
+ ],
+ "fields": [
+  {
+   "fieldname": "company_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Company Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Customer Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sale_price",
+   "fieldtype": "Currency",
+   "label": "Sale Price",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicle_items",
+   "fieldtype": "Table",
+   "label": "Vehicle Items",
+   "options": "Vehicle Price Items"
+  },
+  {
+   "fieldname": "total_quantity",
+   "fieldtype": "Float",
+   "label": "Total Quantity",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "non_negative": 1,
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "price_totals_section",
+   "fieldtype": "Section Break",
+   "label": "Price Totals"
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "in_words",
+   "fieldtype": "Small Text",
+   "label": "In Words",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicle_info_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Info"
+  },
+  {
+   "fieldname": "section_break_qrbv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "chassis_number",
+   "fieldtype": "Link",
+   "label": "Chassis Number",
+   "options": "Vehicle Entry",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_tejs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "chassis_number.car_model",
+   "fieldname": "car_model",
+   "fieldtype": "Data",
+   "label": "Car Model",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "chassis_number.model_year",
+   "fieldname": "model_year",
+   "fieldtype": "Data",
+   "label": "Model Year",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "chassis_number.color",
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Color",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "chassis_number.auction_grade",
+   "fieldname": "auction_grade",
+   "fieldtype": "Data",
+   "label": "Auction Grade",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Data",
+   "label": "Current Status",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-09-17 11:10:18.902917",
+ "modified_by": "Administrator",
+ "module": "Vehicle Management",
+ "name": "Vehicle Price",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
