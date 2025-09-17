@@ -32,3 +32,10 @@ class VehiclePrice(Document):
         except Exception:
             self.in_words = ''
 
+        # Sync status from Vehicle Entry
+        if self.chassis_number:
+            vehicle_entry_status = frappe.db.get_value("Vehicle Entry", 
+                {"chassis_number": self.chassis_number, "docstatus": 1}, "status")
+            if vehicle_entry_status:
+                self.current_status = vehicle_entry_status
+

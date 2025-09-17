@@ -11,20 +11,20 @@ frappe.ui.form.on('Vehicle Price', {
     chassis_number: function(frm) {
     if (frm.doc.chassis_number) {
         frappe.db.get_list("Vehicle Availability", {
-            fields: ["current_status"],
+            fields: ["availability_status"],
             filters: { chassis_number: frm.doc.chassis_number },
             order_by: "creation desc",
             limit: 1
         }).then(r => {
             if (r && r.length > 0) {
-                frm.set_value("current_status", r[0].current_status);
+                frm.set_value("availability_status", r[0].availability_status);
             } else {
-                frm.set_value("current_status", "");
+                frm.set_value("availability_status", "");
                 frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
             }
         });
     } else {
-        frm.set_value("current_status", "");
+        frm.set_value("availability_status", "");
     }
 }
 });
@@ -34,7 +34,7 @@ frappe.ui.form.on('Vehicle Price Item', {
         let row = locals[cdt][cdn];
         if (!row) return;
 
-        // 🔎 check duplicates
+        // check duplicates
         let duplicates = (frm.doc.vehicle_items || []).filter(r => r.item === row.item);
         if (duplicates.length > 1) {
             frappe.msgprint(__('Item {0} already exists. Duplicate row removed.', [row.item]));
@@ -43,28 +43,24 @@ frappe.ui.form.on('Vehicle Price Item', {
             return;
         }
 
-        update_row_amount(frm, cdt, cdn);
+        calculate_amount(frm, cdt, cdn);
     },
     quantity: function(frm, cdt, cdn) {
-        update_row_amount(frm, cdt, cdn);
+        calculate_amount(frm, cdt, cdn);
     },
     rate: function(frm, cdt, cdn) {
-        update_row_amount(frm, cdt, cdn);
+        calculate_amount(frm, cdt, cdn);
     },
     vehicle_items_remove: function(frm) {
         update_totals(frm);
     }
 });
 
-function update_row_amount(frm, cdt, cdn) {
-    let row = locals[cdt][cdn];
-
-    // calculate instantly
-    row.amount = (row.quantity || 0) * (row.rate || 0);
-
-    // ✅ refresh this row’s UI immediately
-    frm.fields_dict["vehicle_items"].grid.refresh_row(row.name);
-
+function calculate_amount(frm, cdt, cdn) {
+    let row = frappe.get_doc(cdt, cdn);
+    let amount = flt(row.quantity || 0) * flt(row.rate || 0);
+    
+    frappe.model.set_value(cdt, cdn, 'amount', amount);
     update_totals(frm);
 }
 

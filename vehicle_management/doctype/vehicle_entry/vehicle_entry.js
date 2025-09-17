@@ -1,7 +1,12 @@
 frappe.ui.form.on('Vehicle Entry', {
     refresh: function(frm) {
-        if (frm.doc.docstatus === 1) {  // only after Vehicle Entry is submitted
+        // Set status indicator with colors
+        if (frm.doc.status) {
+            let color = get_status_color(frm.doc.status);
+            frm.page.set_indicator(__(frm.doc.status), color);
+        }
 
+        if (frm.doc.docstatus === 1) {
             // Create → Availability (only if none exists yet)
             frappe.db.get_list('Vehicle Availability', {
                 filters: { chassis_number: frm.doc.chassis_number, docstatus: 1 },
@@ -43,3 +48,16 @@ frappe.ui.form.on('Vehicle Entry', {
         }
     }
 });
+
+function get_status_color(status) {
+    const status_colors = {
+        'Draft': 'red',
+        'To Availability and To Price': 'orange',
+        'To Price': 'yellow', 
+        'Pending Availability': 'blue',
+        'Completed': 'green',
+        'Rollback': 'red',
+        'Cancelled': 'red'
+    };
+    return status_colors[status] || 'gray';
+}
