@@ -8,10 +8,10 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
-    chart = get_chart_data()
-    summary = None  # Remove built-in summary
+    #chart = get_chart_data()
+    summary = get_summary_data()
     
-    return columns, data, None, chart, summary
+    return columns, data, None, None, summary
 
 
 def get_columns():
@@ -189,9 +189,7 @@ def get_summary_data():
             COUNT(*) as total_vehicles,
             SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Port' THEN 1 ELSE 0 END) as port_count,
             SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Showroom' THEN 1 ELSE 0 END) as showroom_count,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Onship' THEN 1 ELSE 0 END) as onship_count,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Others' THEN 1 ELSE 0 END) as others_count
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count
         FROM 
             `tabVehicle Entry` ve
         LEFT JOIN 
@@ -227,18 +225,6 @@ def get_summary_data():
             "value": counts.get('warehouse_count', 0),
             "label": "In Warehouse",
             "indicator": "Orange",
-            "datatype": "Int"
-        },
-        {
-            "value": counts.get('onship_count', 0),
-            "label": "On Ship",
-            "indicator": "Red",
-            "datatype": "Int"
-        },
-        {
-            "value": counts.get('others_count', 0),
-            "label": "Others",
-            "indicator": "Yellow",
             "datatype": "Int"
         }
     ]
