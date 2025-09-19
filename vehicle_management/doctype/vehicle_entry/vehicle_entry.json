@@ -41,6 +41,8 @@
   {
    "fieldname": "car_model",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_standard_filter": 1,
    "label": "Car Model",
    "options": "Car Model",
    "reqd": 1
@@ -48,6 +50,10 @@
   {
    "fieldname": "model_year",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Model Year",
    "options": "Model Year",
    "reqd": 1
@@ -56,6 +62,8 @@
    "default": "New",
    "fieldname": "shape",
    "fieldtype": "Select",
+   "in_filter": 1,
+   "in_standard_filter": 1,
    "label": "Shape",
    "options": "New\nOld"
   },
@@ -79,13 +87,16 @@
   {
    "fieldname": "color",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_standard_filter": 1,
    "label": "Color",
    "options": "Color"
   },
   {
    "fieldname": "mileage",
    "fieldtype": "Data",
-   "label": "Mileage"
+   "label": "Mileage",
+   "placeholder": "e.g. 1000 km"
   },
   {
    "default": "4",
@@ -97,6 +108,9 @@
   {
    "fieldname": "country_of_origin",
    "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Country of Origin",
    "options": "Country"
   },
@@ -118,7 +132,8 @@
   {
    "fieldname": "cc",
    "fieldtype": "Data",
-   "label": "Engine Capacity"
+   "label": "Engine Capacity",
+   "placeholder": "e.g. 1200 CC"
   },
   {
    "fieldname": "status",
@@ -145,7 +160,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-17 11:40:11.774926",
+ "modified": "2025-09-19 18:18:39.291203",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Entry",

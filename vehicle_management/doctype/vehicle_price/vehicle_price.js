@@ -5,6 +5,11 @@ frappe.ui.form.on('Vehicle Price', {
             let color = get_status_color(frm.doc.status);
             frm.page.set_indicator(__(frm.doc.status), color);
         }
+
+        // Add navigation buttons
+        if (frm.doc.chassis_number) {
+            add_navigation_buttons(frm);
+        }
     },
     
     after_save: function(frm) {
@@ -24,7 +29,7 @@ frappe.ui.form.on('Vehicle Price', {
                     frm.set_value('status', r.status);
                 }
             });
-            
+
             // Fetch availability status from Vehicle Availability
             frappe.db.get_list("Vehicle Availability", {
                 fields: ["availability_status", "port_location", "shed_number", "ship_details", "showroom_address", "warehouse_address", "others_details"],
@@ -35,7 +40,7 @@ frappe.ui.form.on('Vehicle Price', {
                 if (r && r.length > 0) {
                     let availability = r[0];
                     frm.set_value("availability_status", availability.availability_status);
-                    
+
                     // Format availability details based on status and available data
                     let details = format_availability_details(availability);
                     frm.set_value("availability_details", details);
@@ -45,6 +50,9 @@ frappe.ui.form.on('Vehicle Price', {
                     frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
                 }
             });
+
+            // Add navigation buttons when chassis number is set
+            add_navigation_buttons(frm);
         } else {
             frm.set_value("availability_status", "");
             frm.set_value("availability_details", "");
@@ -163,5 +171,45 @@ function format_availability_details(availability) {
     }
     
     return details.join('\n');
+}
+
+function add_navigation_buttons(frm) {
+    // Add button to navigate to Vehicle Entry
+    frm.add_custom_button(__('Vehicle Entry'), function() {
+        frappe.set_route('Form', 'Vehicle Entry', frm.doc.chassis_number);
+    }, __('Navigate'));
+
+    // Check if Vehicle Availability exists and add appropriate button
+    frappe.db.get_list('Vehicle Availability', {
+        filters: { chassis_number: frm.doc.chassis_number },
+        fields: ['name', 'docstatus'],
+        order_by: 'creation desc',
+        limit: 1
+    }).then(r => {
+        if (r && r.length > 0) {
+            // Availability exists - add button to navigate to it
+            frm.add_custom_button(__('Vehicle Availability'), function() {
+                frappe.set_route('Form', 'Vehicle Availability', r[0].name);
+            }, __('Navigate'));
+        } else {
+            // No availability exists - add button to create new one
+            frm.add_custom_button(__('Create Availability'), function() {
+                // First get vehicle entry details
+                frappe.db.get_doc('Vehicle Entry', frm.doc.chassis_number).then(vehicle => {
+                    frappe.new_doc('Vehicle Availability', {
+                        chassis_number: frm.doc.chassis_number,
+                        car_model: vehicle.car_model,
+                        model_year: vehicle.model_year,
+                        shape: vehicle.shape,
+                        auction_grade: vehicle.auction_grade,
+                        color: vehicle.color,
+                        mileage: vehicle.mileage,
+                        cc: vehicle.cc,
+                        description: vehicle.description
+                    });
+                });
+            }, __('Navigate'));
+        }
+    });
 }
 

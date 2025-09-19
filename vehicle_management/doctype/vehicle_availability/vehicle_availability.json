@@ -60,6 +60,8 @@
    "fetch_from": "vehicle_chassis_number.car_model",
    "fieldname": "car_model",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Car Model",
    "read_only": 1
   },
@@ -123,7 +125,9 @@
    "depends_on": "eval:doc.availability_status==\"Port\";\n",
    "fieldname": "port_location",
    "fieldtype": "Link",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Port Location",
    "options": "Port Location"
   },
@@ -171,7 +175,9 @@
   {
    "fieldname": "availability_status",
    "fieldtype": "Select",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Availability Status",
    "no_copy": 1,
    "options": "\nPort\nOnship\nShowroom\nWarehouse\nOther",
@@ -206,7 +212,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-18 13:48:37.701634",
+ "modified": "2025-09-19 18:16:54.791549",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Availability",
