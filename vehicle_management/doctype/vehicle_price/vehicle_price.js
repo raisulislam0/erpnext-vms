@@ -27,20 +27,27 @@ frappe.ui.form.on('Vehicle Price', {
             
             // Fetch availability status from Vehicle Availability
             frappe.db.get_list("Vehicle Availability", {
-                fields: ["availability_status"],
+                fields: ["availability_status", "port_location", "shed_number", "ship_details", "showroom_address", "warehouse_address", "others_details"],
                 filters: { chassis_number: frm.doc.chassis_number },
                 order_by: "creation desc",
                 limit: 1
             }).then(r => {
                 if (r && r.length > 0) {
-                    frm.set_value("availability_status", r[0].availability_status);
+                    let availability = r[0];
+                    frm.set_value("availability_status", availability.availability_status);
+                    
+                    // Format availability details based on status and available data
+                    let details = format_availability_details(availability);
+                    frm.set_value("availability_details", details);
                 } else {
                     frm.set_value("availability_status", "");
+                    frm.set_value("availability_details", "");
                     frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
                 }
             });
         } else {
             frm.set_value("availability_status", "");
+            frm.set_value("availability_details", "");
         }
     },
     
@@ -55,7 +62,7 @@ frappe.ui.form.on('Vehicle Price', {
     }
 });
 
-frappe.ui.form.on('Vehicle Price Item', {
+frappe.ui.form.on('Vehicle Price Items', {
     item: function(frm, cdt, cdn) {
         let row = locals[cdt][cdn];
         if (!row) return;
@@ -65,7 +72,6 @@ frappe.ui.form.on('Vehicle Price Item', {
         if (duplicates.length > 1) {
             frappe.msgprint(__('Item {0} already exists. Duplicate row removed.', [row.item]));
             frm.get_field('vehicle_items').grid.grid_rows_by_docname[cdn].remove();
-            frm.refresh_field('vehicle_items');
             return;
         }
 
@@ -120,5 +126,42 @@ function get_status_color(status) {
         'Cancelled': 'red'
     };
     return status_colors[status] || 'gray';
+}
+
+function format_availability_details(availability) {
+    let details = [];
+    
+    // Port details
+    if (availability.port_location) {
+        let port_detail = `Port Location: ${availability.port_location}`;
+        if (availability.shed_number) {
+            port_detail += `\n\nShed Number: ${availability.shed_number}`;
+        }
+        details.push(port_detail);
+    } else if (availability.shed_number) {
+        details.push(`Shed Number: ${availability.shed_number}`);
+    }
+    
+    // Ship details
+    if (availability.ship_details) {
+        details.push(`Ship Details: ${availability.ship_details}`);
+    }
+    
+    // Showroom address
+    if (availability.showroom_address) {
+        details.push(`Showroom Address: ${availability.showroom_address}`);
+    }
+    
+    // Warehouse address
+    if (availability.warehouse_address) {
+        details.push(`Warehouse Address: ${availability.warehouse_address}`);
+    }
+    
+    // Others details
+    if (availability.others_details) {
+        details.push(`Others: ${availability.others_details}`);
+    }
+    
+    return details.join('\n');
 }
 
