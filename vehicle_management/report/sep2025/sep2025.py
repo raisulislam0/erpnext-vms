@@ -8,8 +8,10 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
+    chart = get_chart_data()
+    summary = None  # Remove built-in summary
     
-    return columns, data
+    return columns, data, None, chart, summary
 
 
 def get_columns():
@@ -177,3 +179,109 @@ def get_data(filters):
     """
     
     return frappe.db.sql(query, filters or {}, as_dict=1)
+
+
+def get_summary_data():
+    """Generate summary data for the report - always shows total counts regardless of filters"""
+    # Get all vehicle counts without any filters
+    query = """
+        SELECT 
+            COUNT(*) as total_vehicles,
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Port' THEN 1 ELSE 0 END) as port_count,
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Showroom' THEN 1 ELSE 0 END) as showroom_count,
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count,
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Onship' THEN 1 ELSE 0 END) as onship_count,
+            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Others' THEN 1 ELSE 0 END) as others_count
+        FROM 
+            `tabVehicle Entry` ve
+        LEFT JOIN 
+            `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
+            AND va.docstatus = 1
+        WHERE 
+            ve.docstatus = 1
+    """
+    
+    result = frappe.db.sql(query, as_dict=1)
+    counts = result[0] if result else {}
+    
+    summary = [
+        {
+            "value": counts.get('total_vehicles', 0),
+            "label": "Total Vehicles",
+            "indicator": "Blue",
+            "datatype": "Int"
+        },
+        {
+            "value": counts.get('port_count', 0),
+            "label": "In Port", 
+            "indicator": "Blue",
+            "datatype": "Int"
+        },
+        {
+            "value": counts.get('showroom_count', 0),
+            "label": "In Showroom",
+            "indicator": "Green", 
+            "datatype": "Int"
+        },
+        {
+            "value": counts.get('warehouse_count', 0),
+            "label": "In Warehouse",
+            "indicator": "Orange",
+            "datatype": "Int"
+        },
+        {
+            "value": counts.get('onship_count', 0),
+            "label": "On Ship",
+            "indicator": "Red",
+            "datatype": "Int"
+        },
+        {
+            "value": counts.get('others_count', 0),
+            "label": "Others",
+            "indicator": "Yellow",
+            "datatype": "Int"
+        }
+    ]
+    
+    return summary
+
+
+def get_chart_data():
+    """Generate chart data for availability status distribution - uses total counts"""
+    # Get total counts without filters (same query as summary)
+    query = """
+        SELECT 
+            COALESCE(va.availability_status, 'Not Set') as status,
+            COUNT(*) as count
+        FROM 
+            `tabVehicle Entry` ve
+        LEFT JOIN 
+            `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
+            AND va.docstatus = 1
+        WHERE 
+            ve.docstatus = 1
+        GROUP BY 
+            COALESCE(va.availability_status, 'Not Set')
+        ORDER BY 
+            count DESC
+    """
+    
+    result = frappe.db.sql(query, as_dict=1)
+    
+    if not result:
+        return None
+    
+    labels = [row['status'] for row in result]
+    values = [row['count'] for row in result]
+    
+    return {
+        "data": {
+            "labels": labels,
+            "datasets": [{
+                "name": "Vehicle Distribution",
+                "values": values
+            }]
+        },
+        "type": "donut",
+        "height": 300
+    }
