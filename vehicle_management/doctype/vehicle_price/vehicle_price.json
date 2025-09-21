@@ -115,6 +115,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "bold": 1,
    "fieldname": "chassis_number",
    "fieldtype": "Link",
@@ -189,6 +190,7 @@
   {
    "fieldname": "state_info_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "State Info"
   },
   {
@@ -203,7 +205,7 @@
    "in_filter": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nCancelled",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Price\nTo Availability\nPending Availability\nCompleted\nCancelled",
    "read_only": 1
   },
   {
@@ -236,7 +238,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-21 12:33:29.071322",
+ "modified": "2025-09-21 17:23:15.354237",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

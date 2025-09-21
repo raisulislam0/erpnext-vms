@@ -8,9 +8,8 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
-    chart = get_chart_data()
-    summary = get_summary_data()
-    
+    chart = get_chart_data(filters)
+    summary = get_summary_data(filters)
     return columns, data, None, None, summary
 
 
@@ -187,15 +186,36 @@ def get_data(filters):
     return frappe.db.sql(query, filters or {}, as_dict=1)
 
 
-def get_summary_data():
-    """Generate summary data for the report - always shows total counts regardless of filters"""
-    # Get all vehicle counts without any filters
-    query = """
+def get_summary_data(filters):
+    conditions = ""
+    if filters and filters.get("chassis_number"):
+        conditions += " AND ve.chassis_number = %(chassis_number)s"
+    if filters and filters.get("car_model"):
+        conditions += " AND ve.car_model = %(car_model)s"
+    if filters and filters.get("model_year"):
+        conditions += " AND ve.model_year = %(model_year)s"
+    if filters and filters.get("shape"):
+        conditions += " AND ve.shape = %(shape)s"
+    if filters and filters.get("auction_grade"):
+        conditions += " AND ve.auction_grade = %(auction_grade)s"
+    if filters and filters.get("color"):
+        conditions += " AND ve.color = %(color)s"
+    if filters and filters.get("country_of_origin"):
+        conditions += " AND ve.country_of_origin = %(country_of_origin)s"
+    if filters and filters.get("availability_status"):
+        conditions += " AND va.availability_status = %(availability_status)s"
+    if filters and filters.get("status"):
+        if filters["status"] == "Cancelled":
+            conditions += " AND ve.docstatus = 2"
+        else:
+            conditions += " AND ve.status = %(status)s AND ve.docstatus != 2"
+
+    query = f"""
         SELECT 
             COUNT(*) as total_vehicles,
-            SUM(CASE WHEN va.availability_status = 'Port' THEN 1 ELSE 0 END) as port_count,
-            SUM(CASE WHEN va.availability_status = 'Showroom' THEN 1 ELSE 0 END) as showroom_count,
-            SUM(CASE WHEN va.availability_status = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count
+            COALESCE(SUM(CASE WHEN va.availability_status = 'Port' THEN 1 ELSE 0 END), 0) as port_count,
+            COALESCE(SUM(CASE WHEN va.availability_status = 'Showroom' THEN 1 ELSE 0 END), 0) as showroom_count,
+            COALESCE(SUM(CASE WHEN va.availability_status = 'Warehouse' THEN 1 ELSE 0 END), 0) as warehouse_count
         FROM 
             `tabVehicle Entry` ve
         LEFT JOIN 
@@ -203,11 +223,11 @@ def get_summary_data():
             AND va.docstatus = 1
         WHERE 
             ve.docstatus IN (0, 1, 2)
+            {conditions}
     """
-    
-    result = frappe.db.sql(query, as_dict=1)
+    result = frappe.db.sql(query, filters or {}, as_dict=1)
     counts = result[0] if result else {}
-    
+
     summary = [
         {
             "value": counts.get('total_vehicles', 0),
@@ -234,11 +254,10 @@ def get_summary_data():
             "datatype": "Int"
         }
     ]
-    
     return summary
 
 
-def get_chart_data():
+def get_chart_data(filters):
     """Generate chart data for availability status distribution - uses total counts"""
     # Get total counts without filters (same query as summary)
     query = """

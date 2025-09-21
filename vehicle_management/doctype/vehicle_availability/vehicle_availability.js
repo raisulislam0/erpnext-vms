@@ -1,11 +1,6 @@
 // Copyright (c) 2025, Raisul Islam and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Vehicle Availability", {
-// 	refresh(frm) {
-
-// 	},
-// });
 
 frappe.ui.form.on('Vehicle Availability', {
     refresh: function(frm) {
@@ -43,6 +38,22 @@ frappe.ui.form.on('Vehicle Availability', {
         frm.set_value('showroom_address', '');
         frm.set_value('warehouse_address', '');
         frm.set_value('others_details', '');
+    },
+    onload: function(frm) {
+    frm.set_query('chassis_number', function() {
+        return {
+            filters: {
+                docstatus: 1 
+            }
+        };
+    });
+    update_totals(frm);
+    },
+
+    before_save: function(frm) {
+        if (frm.doc.docstatus === 0) {
+            frm.set_value('status', 'Draft');
+        }
     }
 });
 

@@ -32,3 +32,7 @@ class VehicleAvailability(Document):
 			from vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry import update_vehicle_entry_status
 			update_vehicle_entry_status(self)
 			self.reload()
+			
+	def before_save(self):
+		if self.docstatus == 0:
+			self.status = "Draft"

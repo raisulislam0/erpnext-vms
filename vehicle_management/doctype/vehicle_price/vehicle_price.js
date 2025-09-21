@@ -47,7 +47,7 @@ frappe.ui.form.on('Vehicle Price', {
                 } else {
                     frm.set_value("availability_status", "");
                     frm.set_value("availability_details", "");
-                    frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
+                    //frappe.msgprint(__("No Vehicle Availability found for Chassis: {0}", [frm.doc.chassis_number]));
                 }
             });
 
@@ -66,7 +66,19 @@ frappe.ui.form.on('Vehicle Price', {
         update_totals(frm);
     },
     onload: function(frm) {
+        frm.set_query('chassis_number', function() {
+            return {
+                filters: {
+                    docstatus: 1 
+                }
+            };
+        });
         update_totals(frm);
+    },
+    before_save: function(frm) {
+        if (frm.doc.docstatus === 0) {
+            frm.set_value('status', 'Draft');
+        }
     }
 });
 

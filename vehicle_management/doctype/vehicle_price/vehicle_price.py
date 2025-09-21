@@ -52,3 +52,7 @@ class VehiclePrice(Document):
             update_vehicle_entry_status(self)
             self.reload()
 
+    def before_save(self):
+        if self.docstatus == 0:
+            self.status = "Draft"
+
