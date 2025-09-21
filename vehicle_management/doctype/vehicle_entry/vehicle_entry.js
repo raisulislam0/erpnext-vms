@@ -56,7 +56,6 @@ function get_status_color(status) {
         'To Price': 'yellow', 
         'Pending Availability': 'blue',
         'Completed': 'green',
-        'Rollback': 'red',
         'Cancelled': 'red'
     };
     return status_colors[status] || 'gray';

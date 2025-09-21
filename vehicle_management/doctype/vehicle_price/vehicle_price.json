@@ -115,16 +115,16 @@
    "reqd": 1
   },
   {
-   "allow_on_submit": 1,
    "bold": 1,
    "fieldname": "chassis_number",
    "fieldtype": "Link",
+   "in_filter": 1,
    "in_global_search": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Chassis Number",
    "options": "Vehicle Entry",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_tejs",
@@ -197,6 +197,7 @@
    "label": "State Info"
   },
   {
+   "fetch_from": "chassis_number.status",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_filter": 1,
@@ -235,7 +236,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-21 10:03:06.042850",
+ "modified": "2025-09-21 12:33:29.071322",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

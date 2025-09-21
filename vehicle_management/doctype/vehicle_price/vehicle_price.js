@@ -175,7 +175,7 @@ function format_availability_details(availability) {
 
 function add_navigation_buttons(frm) {
     // Add button to navigate to Vehicle Entry
-    frm.add_custom_button(__('Vehicle Entry'), function() {
+    frm.add_custom_button(__('Entry'), function() {
         frappe.set_route('Form', 'Vehicle Entry', frm.doc.chassis_number);
     }, __('Navigate'));
 
@@ -193,7 +193,7 @@ function add_navigation_buttons(frm) {
             }, __('Navigate'));
         } else {
             // No availability exists - add button to create new one
-            frm.add_custom_button(__('Create Availability'), function() {
+            frm.add_custom_button(__('Availability'), function() {
                 // First get vehicle entry details
                 frappe.db.get_doc('Vehicle Entry', frm.doc.chassis_number).then(vehicle => {
                     frappe.new_doc('Vehicle Availability', {

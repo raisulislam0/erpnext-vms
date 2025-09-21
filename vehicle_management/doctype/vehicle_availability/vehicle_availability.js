@@ -79,7 +79,7 @@ function add_navigation_buttons(frm) {
             }, __('Navigate'));
         } else {
             // No price exists - add button to create new one
-            frm.add_custom_button(__('Create Price'), function() {
+            frm.add_custom_button(__('Price'), function() {
                 // First get vehicle entry details
                 frappe.db.get_doc('Vehicle Entry', frm.doc.chassis_number).then(vehicle => {
                     frappe.new_doc('Vehicle Price', {

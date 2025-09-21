@@ -24,7 +24,7 @@ class VehicleEntry(Document):
         if self.docstatus != 1:
             return
         
-        # Check cancelled docs first
+        # Check cancelled docs
         avail_cancelled = frappe.db.exists("Vehicle Availability", {
             "chassis_number": self.chassis_number, "docstatus": 2
         })
@@ -40,24 +40,55 @@ class VehicleEntry(Document):
             "chassis_number": self.chassis_number, "docstatus": 1
         })
 
+        # Check if docs exist at all (draft, submitted, or cancelled)
+        avail_exists = frappe.db.exists("Vehicle Availability", {
+            "chassis_number": self.chassis_number
+        })
+        price_exists = frappe.db.exists("Vehicle Price", {
+            "chassis_number": self.chassis_number
+        })
 
+        # Status logic - prioritize completion first
         if avail_submitted and price_submitted:
             self.status = "Completed"
+        
+        # Then handle partial completion
         elif price_submitted and not avail_submitted:
-            self.status = "Pending Availability"
+            if avail_cancelled or not avail_exists:
+                self.status = "Pending Availability"
+            else:
+                self.status = "Pending Availability"
+        
         elif avail_submitted and not price_submitted:
-            self.status = "To Price"
-        elif price_cancelled and avail_cancelled:
+            if price_cancelled or not price_exists:
+                self.status = "To Price"
+            else:
+                self.status = "To Price"
+        
+        # Handle cancellation scenarios
+        elif avail_cancelled and price_cancelled:
             self.status = "To Availability and To Price"
-        elif price_cancelled and not avail_submitted:
-            self.status = "To Price"
-        elif avail_cancelled and not price_submitted:
+        
+        elif avail_cancelled and not price_exists:
+            # Availability cancelled, price never created
+            self.status = "To Availability and To Price"
+        
+        elif price_cancelled and not avail_exists:
+            # Price cancelled, availability never created
+            self.status = "To Availability and To Price"
+        
+        elif avail_cancelled and price_submitted:
             self.status = "Pending Availability"
+        
+        elif price_cancelled and avail_submitted:
+            self.status = "To Price"
+        
+        # Default case - neither exists or both are in draft
         else:
             self.status = "To Availability and To Price"
 
 
-def update_vehicle_entry_status(doc, method=None):
+def update_vehicle_entry_status(doc):
     """Update Vehicle Entry status when linked docs change"""
     if hasattr(doc, 'chassis_number') and doc.chassis_number:
         # Check if Vehicle Entry is cancelled first
