@@ -6,21 +6,25 @@
  "engine": "InnoDB",
  "field_order": [
   "vehicle_info_section",
-  "posting_date",
   "chassis_number",
   "availability_status",
   "availability_details",
   "column_break_tejs",
+  "posting_date",
   "car_model",
   "model_year",
   "color",
   "auction_grade",
   "section_break_qrbv",
   "company_price",
-  "customer_price",
   "sale_price",
+  "column_break_zgni",
+  "customer_price",
+  "extra_items",
   "vehicle_items",
+  "section_break_ljeb",
   "total_quantity",
+  "column_break_ryhg",
   "total_amount",
   "price_totals_section",
   "grand_total",
@@ -52,6 +56,7 @@
    "read_only": 1
   },
   {
+   "allow_in_quick_entry": 1,
    "columns": 5,
    "fieldname": "vehicle_items",
    "fieldtype": "Table",
@@ -97,8 +102,10 @@
    "label": "Vehicle Info"
   },
   {
+   "bold": 1,
    "fieldname": "section_break_qrbv",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Price"
   },
   {
    "default": "Today",
@@ -195,7 +202,7 @@
    "in_filter": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nRollback",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nCancelled",
    "read_only": 1
   },
   {
@@ -205,13 +212,30 @@
    "in_list_view": 1,
    "label": "Availability Details",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_zgni",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "extra_items",
+   "fieldtype": "Section Break",
+   "label": "Extra Items"
+  },
+  {
+   "fieldname": "section_break_ljeb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ryhg",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-19 18:15:36.882434",
+ "modified": "2025-09-21 10:03:06.042850",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

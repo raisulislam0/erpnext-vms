@@ -6,7 +6,6 @@ frappe.listview_settings["Vehicle Entry"] = {
             'To Price': 'yellow',
             'Pending Availability': 'blue', 
             'Completed': 'green',
-            'Rollback': 'red',
             'Cancelled': 'red'
         };
         return [__(doc.status), status_colors[doc.status], "status,=," + doc.status];

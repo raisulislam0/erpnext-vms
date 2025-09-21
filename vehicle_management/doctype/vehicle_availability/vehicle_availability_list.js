@@ -6,7 +6,6 @@ frappe.listview_settings["Vehicle Availability"] = {
             'To Price': 'yellow',
             'Pending Availability': 'blue', 
             'Completed': 'green',
-            'Rollback': 'red',
             'Cancelled': 'red'
         };
         let status = doc.status || 'Draft';
