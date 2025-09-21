@@ -24,8 +24,11 @@ frappe.query_reports["Sep2025"] = {
 		{
 			"fieldname": "car_model",
 			"label": __("Car Model"),
-			"fieldtype": "Link",
+			"fieldtype": "MultiSelectList",
 			"options": "Car Model",
+			get_data: function (txt) {
+				return frappe.db.get_link_options("Car Model", txt);
+			},
 			"width": "80px"
 		},
 		{
@@ -52,10 +55,14 @@ frappe.query_reports["Sep2025"] = {
 		{
 			"fieldname": "color",
 			"label": __("Color"),
-			"fieldtype": "Link",
+			"fieldtype": "MultiSelectList",
 			"options": "Color",
+			get_data: function (txt) {
+				return frappe.db.get_link_options("Color", txt);
+			},
 			"width": "80px"
 		},
+	
 		{
 			"fieldname": "country_of_origin",
 			"label": __("Country"),

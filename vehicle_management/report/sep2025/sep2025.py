@@ -123,29 +123,47 @@ def get_columns():
 
 def get_data(filters):
     conditions = ""
-    
+    params = {}
+
     if filters and filters.get("chassis_number"):
         conditions += " AND ve.chassis_number = %(chassis_number)s"
+        params["chassis_number"] = filters["chassis_number"]
     if filters and filters.get("car_model"):
-        conditions += " AND ve.car_model = %(car_model)s"
+        if isinstance(filters["car_model"], list):
+            conditions += " AND ve.car_model IN %(car_model)s"
+            params["car_model"] = tuple(filters["car_model"])  # MySQL expects a tuple for IN
+        else:
+            conditions += " AND ve.car_model = %(car_model)s"
+            params["car_model"] = filters["car_model"]
     if filters and filters.get("model_year"):
         conditions += " AND ve.model_year = %(model_year)s"
+        params["model_year"] = filters["model_year"]
     if filters and filters.get("shape"):
         conditions += " AND ve.shape = %(shape)s"
+        params["shape"] = filters["shape"]
     if filters and filters.get("auction_grade"):
         conditions += " AND ve.auction_grade = %(auction_grade)s"
+        params["auction_grade"] = filters["auction_grade"]
     if filters and filters.get("color"):
-        conditions += " AND ve.color = %(color)s"
+        if isinstance(filters["color"], list):
+            conditions += " AND ve.color IN %(color)s"
+            params["color"] = tuple(filters["color"])  # MySQL expects a tuple for IN
+        else:
+            conditions += " AND ve.color = %(color)s"
+            params["color"] = filters["color"]
     if filters and filters.get("country_of_origin"):
         conditions += " AND ve.country_of_origin = %(country_of_origin)s"
+        params["country_of_origin"] = filters["country_of_origin"]
     if filters and filters.get("availability_status"):
         conditions += " AND va.availability_status = %(availability_status)s"
+        params["availability_status"] = filters["availability_status"]
     if filters and filters.get("status"):
         if filters["status"] == "Cancelled":
             conditions += " AND ve.docstatus = 2"
         else:
             conditions += " AND ve.status = %(status)s AND ve.docstatus != 2"
-    
+        params["status"] = filters["status"]
+
     query = f"""
         SELECT 
             ve.chassis_number,
@@ -183,32 +201,51 @@ def get_data(filters):
             ve.creation DESC
     """
     
-    return frappe.db.sql(query, filters or {}, as_dict=1)
+    return frappe.db.sql(query, params, as_dict=1)
 
 
 def get_summary_data(filters):
     conditions = ""
+    params = {}
+
     if filters and filters.get("chassis_number"):
         conditions += " AND ve.chassis_number = %(chassis_number)s"
+        params["chassis_number"] = filters["chassis_number"]
     if filters and filters.get("car_model"):
-        conditions += " AND ve.car_model = %(car_model)s"
+        if isinstance(filters["car_model"], list):
+            conditions += " AND ve.car_model IN %(car_model)s"
+            params["car_model"] = tuple(filters["car_model"])
+        else:
+            conditions += " AND ve.car_model = %(car_model)s"
+            params["car_model"] = filters["car_model"]
     if filters and filters.get("model_year"):
         conditions += " AND ve.model_year = %(model_year)s"
+        params["model_year"] = filters["model_year"]
     if filters and filters.get("shape"):
         conditions += " AND ve.shape = %(shape)s"
+        params["shape"] = filters["shape"]
     if filters and filters.get("auction_grade"):
         conditions += " AND ve.auction_grade = %(auction_grade)s"
+        params["auction_grade"] = filters["auction_grade"]
     if filters and filters.get("color"):
-        conditions += " AND ve.color = %(color)s"
+        if isinstance(filters["color"], list):
+            conditions += " AND ve.color IN %(color)s"
+            params["color"] = tuple(filters["color"])
+        else:
+            conditions += " AND ve.color = %(color)s"
+            params["color"] = filters["color"]
     if filters and filters.get("country_of_origin"):
         conditions += " AND ve.country_of_origin = %(country_of_origin)s"
+        params["country_of_origin"] = filters["country_of_origin"]
     if filters and filters.get("availability_status"):
         conditions += " AND va.availability_status = %(availability_status)s"
+        params["availability_status"] = filters["availability_status"]
     if filters and filters.get("status"):
         if filters["status"] == "Cancelled":
             conditions += " AND ve.docstatus = 2"
         else:
             conditions += " AND ve.status = %(status)s AND ve.docstatus != 2"
+        params["status"] = filters["status"]
 
     query = f"""
         SELECT 
@@ -225,7 +262,7 @@ def get_summary_data(filters):
             ve.docstatus IN (0, 1, 2)
             {conditions}
     """
-    result = frappe.db.sql(query, filters or {}, as_dict=1)
+    result = frappe.db.sql(query, params, as_dict=1)
     counts = result[0] if result else {}
 
     summary = [

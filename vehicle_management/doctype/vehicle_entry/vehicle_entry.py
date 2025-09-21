@@ -23,17 +23,14 @@ class VehicleEntry(Document):
     def update_status_from_linked_docs(self):
         if self.docstatus != 1:
             return
-        
-    
-        # Check cancelled docs
+
         avail_cancelled = frappe.db.exists("Vehicle Availability", {
             "chassis_number": self.chassis_number, "docstatus": 2
         })
         price_cancelled = frappe.db.exists("Vehicle Price", {
             "chassis_number": self.chassis_number, "docstatus": 2
         })
-        
-        # Check submitted docs
+
         avail_submitted = frappe.db.exists("Vehicle Availability", {
             "chassis_number": self.chassis_number, "docstatus": 1
         })
@@ -41,44 +38,47 @@ class VehicleEntry(Document):
             "chassis_number": self.chassis_number, "docstatus": 1
         })
 
-        avail_exists = frappe.db.exists("Vehicle Availability", {
-            "chassis_number": self.chassis_number
+        # Check for draft (not submitted/cancelled) Vehicle Availability
+        avail_draft = frappe.db.exists("Vehicle Availability", {
+            "chassis_number": self.chassis_number, "docstatus": 0
         })
-        price_exists = frappe.db.exists("Vehicle Price", {
-            "chassis_number": self.chassis_number
+        price_draft = frappe.db.exists("Vehicle Price", {
+            "chassis_number": self.chassis_number, "docstatus": 0
         })
+
+        avail_exists = avail_submitted or avail_draft
+        price_exists = price_submitted or price_draft
 
         if avail_submitted and price_submitted:
             self.status = "Completed"
-        
+
         elif price_submitted and not avail_submitted:
-            if avail_cancelled or not avail_exists:
-                self.status = "To Availability"
-            else:
+            if avail_cancelled:
                 self.status = "Pending Availability"
-        
+            else:
+                self.status = "To Availability"
+
         elif avail_submitted and not price_submitted:
             if price_cancelled or not price_exists:
                 self.status = "To Price"
             else:
                 self.status = "Pending Price"
-        
 
         elif avail_cancelled and price_cancelled:
             self.status = "To Availability and To Price"
-        
+
         elif avail_cancelled and not price_exists:
             self.status = "To Availability and To Price"
-        
+
         elif price_cancelled and not avail_exists:
             self.status = "To Availability and To Price"
-        
+
         elif avail_cancelled and price_submitted:
             self.status = "To Availability"
-        
+
         elif price_cancelled and avail_submitted:
             self.status = "To Price"
-        
+
         else:
             self.status = "To Availability and To Price"
 
