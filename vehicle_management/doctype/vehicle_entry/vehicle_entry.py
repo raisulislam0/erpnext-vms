@@ -24,6 +24,7 @@ class VehicleEntry(Document):
         if self.docstatus != 1:
             return
         
+    
         # Check cancelled docs
         avail_cancelled = frappe.db.exists("Vehicle Availability", {
             "chassis_number": self.chassis_number, "docstatus": 2
@@ -40,7 +41,6 @@ class VehicleEntry(Document):
             "chassis_number": self.chassis_number, "docstatus": 1
         })
 
-        # Check if docs exist at all (draft, submitted, or cancelled)
         avail_exists = frappe.db.exists("Vehicle Availability", {
             "chassis_number": self.chassis_number
         })
@@ -48,14 +48,12 @@ class VehicleEntry(Document):
             "chassis_number": self.chassis_number
         })
 
-        # Status logic - prioritize completion first
         if avail_submitted and price_submitted:
             self.status = "Completed"
         
-        # Then handle partial completion
         elif price_submitted and not avail_submitted:
             if avail_cancelled or not avail_exists:
-                self.status = "Pending Availability"
+                self.status = "To Availability"
             else:
                 self.status = "Pending Availability"
         
@@ -63,27 +61,24 @@ class VehicleEntry(Document):
             if price_cancelled or not price_exists:
                 self.status = "To Price"
             else:
-                self.status = "To Price"
+                self.status = "Pending Price"
         
-        # Handle cancellation scenarios
+
         elif avail_cancelled and price_cancelled:
             self.status = "To Availability and To Price"
         
         elif avail_cancelled and not price_exists:
-            # Availability cancelled, price never created
             self.status = "To Availability and To Price"
         
         elif price_cancelled and not avail_exists:
-            # Price cancelled, availability never created
             self.status = "To Availability and To Price"
         
         elif avail_cancelled and price_submitted:
-            self.status = "Pending Availability"
+            self.status = "To Availability"
         
         elif price_cancelled and avail_submitted:
             self.status = "To Price"
         
-        # Default case - neither exists or both are in draft
         else:
             self.status = "To Availability and To Price"
 

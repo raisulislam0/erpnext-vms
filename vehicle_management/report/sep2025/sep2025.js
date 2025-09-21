@@ -58,14 +58,14 @@ frappe.query_reports["Sep2025"] = {
 		},
 		{
 			"fieldname": "country_of_origin",
-			"label": __("Origin Country"),
+			"label": __("Country"),
 			"fieldtype": "Link",
 			"options": "Country",
 			"width": "80px"
 		},
 		{
 			"fieldname": "availability_status",
-			"label": __("Availability Status"),
+			"label": __("Availability"),
 			"fieldtype": "Select",
 			"options": "\nPort\nShowroom\nWarehouse\nOnship\nOthers",
 			"width": "80px"
@@ -74,7 +74,7 @@ frappe.query_reports["Sep2025"] = {
 			"fieldname": "status",
 			"label": __("Status"),
 			"fieldtype": "Select",
-			"options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nRollback",
+			"options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Availability\nCompleted\nTo Availability\nPending Price\nCancelled",
 			"width": "80px"
 		}
 	],
@@ -107,7 +107,7 @@ frappe.query_reports["Sep2025"] = {
 				value = `<span class="indicator blue">${value}</span>`;
 			} else if (value == "Completed") {
 				value = `<span class="indicator green">${value}</span>`;
-			} else if (value == "Rollback") {
+			} else if (value == "Cancelled") {
 				value = `<span class="indicator red">${value}</span>`;
 			}
 		}

@@ -8,7 +8,7 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
-    #chart = get_chart_data()
+    chart = get_chart_data()
     summary = get_summary_data()
     
     return columns, data, None, None, summary
@@ -73,13 +73,13 @@ def get_columns():
         },
         {
             "fieldname": "country_of_origin",
-            "label": _("Origin Country"),
+            "label": _("Country"),
             "fieldtype": "Data",
             "width": 120
         },
         {
             "fieldname": "availability_status",
-            "label": _("Availability Status"),
+            "label": _("Availability"),
             "fieldtype": "Data",
             "width": 130
         },
@@ -142,7 +142,10 @@ def get_data(filters):
     if filters and filters.get("availability_status"):
         conditions += " AND va.availability_status = %(availability_status)s"
     if filters and filters.get("status"):
-        conditions += " AND ve.status = %(status)s"
+        if filters["status"] == "Cancelled":
+            conditions += " AND ve.docstatus = 2"
+        else:
+            conditions += " AND ve.status = %(status)s AND ve.docstatus != 2"
     
     query = f"""
         SELECT 
@@ -156,13 +159,16 @@ def get_data(filters):
             ve.cc,
             ve.seat_capacity,
             ve.country_of_origin,
-            COALESCE(va.availability_status, 'Not Set') as availability_status,
+            va.availability_status as availability_status,
             COALESCE(vp.company_price, 0) as company_price,
             COALESCE(vp.customer_price, 0) as customer_price,
             COALESCE(vp.sale_price, 0) as sale_price,
             COALESCE(vp.total_amount, 0) as other_amount,
             COALESCE(vp.grand_total, 0) as grand_total,
-            ve.status as overall_status
+            CASE 
+                WHEN ve.docstatus = 2 THEN 'Cancelled'
+                ELSE ve.status
+            END as overall_status
         FROM 
             `tabVehicle Entry` ve
         LEFT JOIN 
@@ -172,7 +178,7 @@ def get_data(filters):
             `tabVehicle Price` vp ON ve.chassis_number = vp.chassis_number 
             AND vp.docstatus = 1
         WHERE 
-            ve.docstatus = 1
+            ve.docstatus IN (0, 1, 2)
             {conditions}
         ORDER BY 
             ve.creation DESC
@@ -187,16 +193,16 @@ def get_summary_data():
     query = """
         SELECT 
             COUNT(*) as total_vehicles,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Port' THEN 1 ELSE 0 END) as port_count,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Showroom' THEN 1 ELSE 0 END) as showroom_count,
-            SUM(CASE WHEN COALESCE(va.availability_status, 'Not Set') = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count
+            SUM(CASE WHEN va.availability_status = 'Port' THEN 1 ELSE 0 END) as port_count,
+            SUM(CASE WHEN va.availability_status = 'Showroom' THEN 1 ELSE 0 END) as showroom_count,
+            SUM(CASE WHEN va.availability_status = 'Warehouse' THEN 1 ELSE 0 END) as warehouse_count
         FROM 
             `tabVehicle Entry` ve
         LEFT JOIN 
             `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
             AND va.docstatus = 1
         WHERE 
-            ve.docstatus = 1
+            ve.docstatus IN (0, 1, 2)
     """
     
     result = frappe.db.sql(query, as_dict=1)
@@ -237,7 +243,7 @@ def get_chart_data():
     # Get total counts without filters (same query as summary)
     query = """
         SELECT 
-            COALESCE(va.availability_status, 'Not Set') as status,
+            va.availability_status as status,
             COUNT(*) as count
         FROM 
             `tabVehicle Entry` ve
@@ -245,9 +251,9 @@ def get_chart_data():
             `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
             AND va.docstatus = 1
         WHERE 
-            ve.docstatus = 1
+            ve.docstatus IN (0, 1, 2)
         GROUP BY 
-            COALESCE(va.availability_status, 'Not Set')
+            va.availability_status
         ORDER BY 
             count DESC
     """
