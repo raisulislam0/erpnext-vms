@@ -293,7 +293,7 @@ def get_summary_data(filters):
     ]
     return summary
 
-
+# chart summary not uninvoked
 def get_chart_data(filters):
     """Generate chart data for availability status distribution - uses total counts"""
     # Get total counts without filters (same query as summary)

@@ -117,6 +117,12 @@ frappe.query_reports["Sep2025"] = {
 			} else if (value == "Cancelled") {
 				value = `<span class="indicator red">${value}</span>`;
 			}
+			else if (value == "To Availability") {
+				value = `<span class="indicator brown">${value}</span>`;
+			}
+			else if (value == "Pending Price") {
+				value = `<span class="indicator purple">${value}</span>`;
+			}
 		}
 		
 		return value;

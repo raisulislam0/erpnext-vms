@@ -6,6 +6,8 @@ frappe.listview_settings["Vehicle Price"] = {
             'To Price': 'yellow',
             'Pending Availability': 'blue', 
             'Completed': 'green',
+            'To Availability': 'brown',
+            'Pending Price': 'purple',
             'Cancelled': 'red'
         };
         let status = doc.status || 'Draft';

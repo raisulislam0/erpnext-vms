@@ -31,6 +31,7 @@
    "label": "Vehicle Entry Form"
   },
   {
+   "bold": 1,
    "fieldname": "chassis_number",
    "fieldtype": "Data",
    "in_filter": 1,
@@ -38,7 +39,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Chassis Number",
-   "no_copy": 1,
+   "placeholder": "Enter Chassis Number",
    "reqd": 1,
    "unique": 1
   },
@@ -50,6 +51,7 @@
    "in_standard_filter": 1,
    "label": "Car Model",
    "options": "Car Model",
+   "placeholder": "Select Model",
    "reqd": 1
   },
   {
@@ -61,6 +63,7 @@
    "in_standard_filter": 1,
    "label": "Model Year",
    "options": "Model Year",
+   "placeholder": "Select Year",
    "reqd": 1
   },
   {
@@ -70,7 +73,8 @@
    "in_filter": 1,
    "in_standard_filter": 1,
    "label": "Shape",
-   "options": "New\nOld"
+   "options": "\nNew\nOld",
+   "placeholder": "New or Old"
   },
   {
    "fieldname": "auction_grade",
@@ -83,7 +87,8 @@
   {
    "fieldname": "package",
    "fieldtype": "Small Text",
-   "label": "Package"
+   "label": "Package",
+   "placeholder": "Type Package Details"
   },
   {
    "fieldname": "column_break_zpbz",
@@ -95,7 +100,8 @@
    "in_filter": 1,
    "in_standard_filter": 1,
    "label": "Color",
-   "options": "Color"
+   "options": "Color",
+   "placeholder": "Select Vehicle Color"
   },
   {
    "fieldname": "mileage",
@@ -108,7 +114,8 @@
    "fieldname": "seat_capacity",
    "fieldtype": "Select",
    "label": "Seat Capacity",
-   "options": "2\n4\n6\n8\n10"
+   "options": "2\n4\n6\n8\n10",
+   "placeholder": "Select Seat Capacity"
   },
   {
    "fieldname": "country_of_origin",
@@ -116,8 +123,9 @@
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Country of Origin",
-   "options": "Country"
+   "label": "Country",
+   "options": "Country",
+   "placeholder": "Select Country of Origin"
   },
   {
    "fieldname": "description",
@@ -159,14 +167,16 @@
    "fieldname": "state_info_tab",
    "fieldtype": "Tab Break",
    "hidden": 1,
-   "label": "State Info "
+   "label": "State Info ",
+   "print_hide": 1,
+   "report_hide": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-21 17:24:59.236794",
+ "modified": "2025-09-22 11:35:28.878235",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Entry",

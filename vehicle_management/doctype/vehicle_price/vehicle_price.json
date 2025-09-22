@@ -27,9 +27,10 @@
   "column_break_ryhg",
   "total_amount",
   "price_totals_section",
-  "grand_total",
   "in_words",
   "amended_from",
+  "column_break_nmyh",
+  "grand_total",
   "state_info_tab",
   "state_info_section",
   "status"
@@ -117,6 +118,7 @@
   {
    "allow_on_submit": 1,
    "bold": 1,
+   "columns": 7,
    "fieldname": "chassis_number",
    "fieldtype": "Link",
    "in_filter": 1,
@@ -124,8 +126,11 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Chassis Number",
+   "max_height": "2px",
    "options": "Vehicle Entry",
-   "reqd": 1
+   "placeholder": "Select Chassis Number",
+   "reqd": 1,
+   "width": "10px"
   },
   {
    "fieldname": "column_break_tejs",
@@ -232,13 +237,17 @@
   {
    "fieldname": "column_break_ryhg",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_nmyh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-21 17:23:15.354237",
+ "modified": "2025-09-22 11:21:40.195528",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

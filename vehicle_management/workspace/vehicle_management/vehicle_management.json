@@ -1,0 +1,62 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"XA_By-oj7K\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Vehicle Management</span>\",\"col\":12}},{\"id\":\"mqFOBh7pUB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Report Sep 2025\",\"col\":3}},{\"id\":\"RsvC8l9glH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Price\",\"col\":3}},{\"id\":\"wg1XBNrNWg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Entry\",\"col\":3}},{\"id\":\"g9mEquCWB6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Availability\",\"col\":3}}]",
+ "creation": "2025-09-17 16:01:09.640247",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "criticize",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Vehicle Management",
+ "links": [],
+ "modified": "2025-09-21 18:56:24.170833",
+ "modified_by": "Administrator",
+ "module": "Vehicle Management",
+ "name": "Vehicle Management",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle Price",
+   "link_to": "Vehicle Price",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle Entry",
+   "link_to": "Vehicle Entry",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Report Sep 2025",
+   "link_to": "Sep2025",
+   "report_ref_doctype": "Vehicle Price",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle Availability",
+   "link_to": "Vehicle Availability",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Vehicle Management"
+}

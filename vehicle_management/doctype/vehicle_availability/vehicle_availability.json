@@ -170,6 +170,7 @@
    "in_list_view": 1,
    "label": "Chassis Number",
    "options": "Vehicle Entry",
+   "placeholder": "Select Chassis Number",
    "reqd": 1
   },
   {
@@ -187,6 +188,7 @@
   {
    "fieldname": "state_info_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "State Info "
   },
   {
@@ -201,7 +203,7 @@
    "in_filter": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "\nDraft\nTo Availability and To Price\nTo Price\nTo Availability\nPending Availability\nCompleted\nCancelled",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Price\nTo Availability\nPending Availability\nCompleted\nCancelled",
    "read_only": 1
   },
   {
@@ -221,7 +223,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-21 17:20:58.270312",
+ "modified": "2025-09-22 11:27:51.352757",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Availability",

@@ -4,7 +4,9 @@ frappe.listview_settings["Vehicle Availability"] = {
             'Draft': 'red',
             'To Availability and To Price': 'orange',
             'To Price': 'yellow',
-            'Pending Availability': 'blue', 
+            'Pending Availability': 'blue',
+            'To Availability': 'brown',
+            'Pending Price': 'purple', 
             'Completed': 'green',
             'Cancelled': 'red'
         };

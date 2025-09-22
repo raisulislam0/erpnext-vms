@@ -127,11 +127,9 @@ function update_totals(frm) {
     frm.set_value("total_quantity", total_qty);
     frm.set_value("total_amount", total_amt);
 
-    // Sale Price = Company + Customer
     let sale_price = (frm.doc.company_price || 0) + (frm.doc.customer_price || 0);
     frm.set_value("sale_price", sale_price);
 
-    // Grand Total = Sale Price + Total Amount
     frm.set_value("grand_total", sale_price + total_amt);
 }
 
@@ -142,7 +140,8 @@ function get_status_color(status) {
         'To Price': 'yellow', 
         'Pending Availability': 'blue',
         'Completed': 'green',
-        'Rollback': 'red',
+        'To Availability': 'brown',
+        'Pending Price': 'purple',
         'Cancelled': 'red'
     };
     return status_colors[status] || 'gray';
@@ -151,7 +150,6 @@ function get_status_color(status) {
 function format_availability_details(availability) {
     let details = [];
     
-    // Port details
     if (availability.port_location) {
         let port_detail = `Port Location: ${availability.port_location}`;
         if (availability.shed_number) {
@@ -162,22 +160,18 @@ function format_availability_details(availability) {
         details.push(`Shed Number: ${availability.shed_number}`);
     }
     
-    // Ship details
     if (availability.ship_details) {
         details.push(`Ship Details: ${availability.ship_details}`);
     }
     
-    // Showroom address
     if (availability.showroom_address) {
         details.push(`Showroom Address: ${availability.showroom_address}`);
     }
     
-    // Warehouse address
     if (availability.warehouse_address) {
         details.push(`Warehouse Address: ${availability.warehouse_address}`);
     }
     
-    // Others details
     if (availability.others_details) {
         details.push(`Others: ${availability.others_details}`);
     }
@@ -186,12 +180,10 @@ function format_availability_details(availability) {
 }
 
 function add_navigation_buttons(frm) {
-    // Add button to navigate to Vehicle Entry
     frm.add_custom_button(__('Entry'), function() {
         frappe.set_route('Form', 'Vehicle Entry', frm.doc.chassis_number);
     }, __('Navigate'));
 
-    // Check if Vehicle Availability exists and add appropriate button
     frappe.db.get_list('Vehicle Availability', {
         filters: { chassis_number: frm.doc.chassis_number },
         fields: ['name', 'docstatus'],
@@ -199,14 +191,11 @@ function add_navigation_buttons(frm) {
         limit: 1
     }).then(r => {
         if (r && r.length > 0) {
-            // Availability exists - add button to navigate to it
             frm.add_custom_button(__('Vehicle Availability'), function() {
                 frappe.set_route('Form', 'Vehicle Availability', r[0].name);
             }, __('Navigate'));
         } else {
-            // No availability exists - add button to create new one
             frm.add_custom_button(__('Availability'), function() {
-                // First get vehicle entry details
                 frappe.db.get_doc('Vehicle Entry', frm.doc.chassis_number).then(vehicle => {
                     frappe.new_doc('Vehicle Availability', {
                         chassis_number: frm.doc.chassis_number,

@@ -38,6 +38,12 @@ class VehiclePrice(Document):
             if vehicle_entry_status:
                 self.status = vehicle_entry_status
 
+        chassis_exists = frappe.db.exists("Vehicle Price", {"chassis_number": self.chassis_number, "docstatus": 1})
+        if chassis_exists:
+            if chassis_exists:
+                frappe.throw(f"Vehicle Price for Chassis Number {self.chassis_number} already exists.")
+                return
+            
     def on_submit(self):
         self.update_vehicle_entry_status()
         self.reload()

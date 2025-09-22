@@ -64,8 +64,9 @@ function get_status_color(status) {
         'To Price': 'yellow', 
         'Pending Availability': 'blue',
         'Completed': 'green',
-        'Rollback': 'red',
-        'Cancelled': 'red'
+        'Cancelled': 'red',
+        'To Availability': 'brown',
+        'Pending Price': 'purple',
     };
     return status_colors[status] || 'gray';
 }

@@ -18,6 +18,12 @@ class VehicleAvailability(Document):
 				elif vehicle_entry.docstatus == 1:
 					# Entry is submitted - sync status
 					self.status = vehicle_entry.status
+		
+		chassis_exists = frappe.db.exists("Vehicle Availability", {"chassis_number": self.chassis_number, "docstatus": 1})
+
+		if chassis_exists:
+			frappe.throw(f"Vehicle Availability for Chassis Number {self.chassis_number} already exists.")
+			return
 
 	def on_submit(self):
 		self.update_vehicle_entry_status()

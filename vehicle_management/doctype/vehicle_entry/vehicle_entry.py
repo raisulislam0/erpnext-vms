@@ -59,10 +59,10 @@ class VehicleEntry(Document):
                 self.status = "To Availability"
 
         elif avail_submitted and not price_submitted:
-            if price_cancelled or not price_exists:
-                self.status = "To Price"
-            else:
+            if price_cancelled:
                 self.status = "Pending Price"
+            else:
+                self.status = "To Price"
 
         elif avail_cancelled and price_cancelled:
             self.status = "To Availability and To Price"
@@ -117,3 +117,11 @@ def update_related_docs_status(chassis_number, new_status):
         SET status = %s 
         WHERE chassis_number = %s
     """, (new_status, chassis_number))
+    
+    frappe.db.sql("""
+        UPDATE `tabVehicle Entry` 
+        SET status = %s 
+        WHERE chassis_number = %s
+    """, (new_status, chassis_number))
+
+    frappe.db.commit()
