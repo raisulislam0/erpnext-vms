@@ -17,8 +17,11 @@ frappe.query_reports["Sep2025"] = {
 		{
 			"fieldname": "chassis_number",
 			"label": __("Chassis Number"),
-			"fieldtype": "Link",
+			"fieldtype": "MultiSelectList",
 			"options": "Vehicle Entry",
+			get_data: function (txt) {
+				return frappe.db.get_link_options("Vehicle Entry", txt);
+			},
 			"width": "80px"
 		},
 		{

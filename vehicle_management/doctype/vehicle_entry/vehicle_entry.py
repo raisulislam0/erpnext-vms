@@ -85,14 +85,16 @@ class VehicleEntry(Document):
 
 def update_vehicle_entry_status(doc):
     """Update Vehicle Entry status when linked docs change"""
-    if hasattr(doc, 'chassis_number') and doc.chassis_number:
-        # Check if Vehicle Entry is cancelled first
+    if hasattr(doc, 'chassis_number') and doc.chassis_number: # checks if chassis_number exists and is not None or empty
+
         vehicle_entry_doc = frappe.db.get_value("Vehicle Entry", 
             {"chassis_number": doc.chassis_number}, ["name", "docstatus"], as_dict=True)
         
         if vehicle_entry_doc:
+
             if vehicle_entry_doc.docstatus == 2:
                 update_related_docs_status(doc.chassis_number, "Cancelled")
+
             elif vehicle_entry_doc.docstatus == 1:
                 ve_doc = frappe.get_doc("Vehicle Entry", vehicle_entry_doc.name)
                 old_status = ve_doc.status
@@ -101,6 +103,7 @@ def update_vehicle_entry_status(doc):
                 if old_status != ve_doc.status:
                     ve_doc.db_set("status", ve_doc.status)
                     update_related_docs_status(doc.chassis_number, ve_doc.status)
+
                     frappe.db.commit()
 
 
@@ -117,7 +120,7 @@ def update_related_docs_status(chassis_number, new_status):
         SET status = %s 
         WHERE chassis_number = %s
     """, (new_status, chassis_number))
-    
+
     frappe.db.sql("""
         UPDATE `tabVehicle Entry` 
         SET status = %s 

@@ -52,14 +52,14 @@
    "label": "Vehicle Details"
   },
   {
-   "fetch_from": "vehicle_chassis_number.model_year",
+   "fetch_from": "chassis_number.model_year",
    "fieldname": "model_year",
    "fieldtype": "Int",
    "label": "Model Year",
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.car_model",
+   "fetch_from": "chassis_number.car_model",
    "fieldname": "car_model",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -68,14 +68,14 @@
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.shape",
+   "fetch_from": "chassis_number.shape",
    "fieldname": "shape",
    "fieldtype": "Data",
    "label": "Shape",
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.auction_grade",
+   "fetch_from": "chassis_number.auction_grade",
    "fieldname": "auction_grade",
    "fieldtype": "Data",
    "label": "Auction Grade",
@@ -86,28 +86,26 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "vehicle_chassis_number.color",
    "fieldname": "color",
    "fieldtype": "Data",
    "label": "Color",
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.mileage",
    "fieldname": "mileage",
    "fieldtype": "Data",
    "label": "Mileage",
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.engine_capacity",
+   "fetch_from": "chassis_number.cc",
    "fieldname": "engine_capacity_cc",
    "fieldtype": "Data",
    "label": "Engine Capacity (CC)",
    "read_only": 1
   },
   {
-   "fetch_from": "vehicle_chassis_number.description",
+   "fetch_from": "chassis_number.description",
    "fieldname": "description",
    "fieldtype": "Text Editor",
    "label": "Description",
@@ -203,7 +201,7 @@
    "in_filter": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "\nDraft\nTo Availability and To Price\nTo Price\nPending Price\nTo Availability\nPending Availability\nCompleted\nCancelled",
+   "options": "\nDraft\nTo Availability and To Price\nTo Price\nTo Availability\nPending Availability\nPending Price\nCompleted\nCancelled",
    "read_only": 1
   },
   {
@@ -223,7 +221,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-22 11:27:51.352757",
+ "modified": "2025-09-23 11:16:59.168679",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Availability",

@@ -29,7 +29,7 @@ class VehicleAvailability(Document):
 		self.update_vehicle_entry_status()
 		self.reload()
 
-	def on_cancel(self): 
+	def on_cancel(self):
 		self.update_vehicle_entry_status()
 		self.reload()
 

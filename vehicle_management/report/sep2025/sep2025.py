@@ -8,7 +8,6 @@ from frappe import _
 def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
-    chart = get_chart_data(filters)
     summary = get_summary_data(filters)
     return columns, data, None, None, summary
 
@@ -126,12 +125,16 @@ def get_data(filters):
     params = {}
 
     if filters and filters.get("chassis_number"):
-        conditions += " AND ve.chassis_number = %(chassis_number)s"
-        params["chassis_number"] = filters["chassis_number"]
+        if isinstance(filters["chassis_number"], list):
+            conditions += " AND ve.chassis_number IN %(chassis_number)s"
+            params["chassis_number"] = tuple(filters["chassis_number"])
+        else:
+            conditions += " AND ve.chassis_number = %(chassis_number)s"
+            params["chassis_number"] = filters["chassis_number"]
     if filters and filters.get("car_model"):
         if isinstance(filters["car_model"], list):
             conditions += " AND ve.car_model IN %(car_model)s"
-            params["car_model"] = tuple(filters["car_model"])  # MySQL expects a tuple for IN
+            params["car_model"] = tuple(filters["car_model"])  
         else:
             conditions += " AND ve.car_model = %(car_model)s"
             params["car_model"] = filters["car_model"]
@@ -147,7 +150,7 @@ def get_data(filters):
     if filters and filters.get("color"):
         if isinstance(filters["color"], list):
             conditions += " AND ve.color IN %(color)s"
-            params["color"] = tuple(filters["color"])  # MySQL expects a tuple for IN
+            params["color"] = tuple(filters["color"])  
         else:
             conditions += " AND ve.color = %(color)s"
             params["color"] = filters["color"]
@@ -195,7 +198,7 @@ def get_data(filters):
             `tabVehicle Price` vp ON ve.chassis_number = vp.chassis_number 
             AND vp.docstatus = 1
         WHERE 
-            ve.docstatus IN (0, 1, 2)
+            ve.docstatus IN (0, 1)
             {conditions}
         ORDER BY 
             ve.creation DESC
@@ -209,8 +212,13 @@ def get_summary_data(filters):
     params = {}
 
     if filters and filters.get("chassis_number"):
-        conditions += " AND ve.chassis_number = %(chassis_number)s"
-        params["chassis_number"] = filters["chassis_number"]
+        if isinstance(filters['chassis_number'], list):
+            conditions += " AND ve.chassis_number IN %(chassis_number)s"
+            params["chassis_number"] = tuple(filters["chassis_number"])
+        else:
+            conditions += " AND ve.chassis_number = %(chassis_number)s"
+            params["chassis_number"] = filters["chassis_number"]
+
     if filters and filters.get("car_model"):
         if isinstance(filters["car_model"], list):
             conditions += " AND ve.car_model IN %(car_model)s"
@@ -259,7 +267,7 @@ def get_summary_data(filters):
             `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
             AND va.docstatus = 1
         WHERE 
-            ve.docstatus IN (0, 1, 2)
+            ve.docstatus IN (0, 1)
             {conditions}
     """
     result = frappe.db.sql(query, params, as_dict=1)
@@ -293,43 +301,3 @@ def get_summary_data(filters):
     ]
     return summary
 
-# chart summary not uninvoked
-def get_chart_data(filters):
-    """Generate chart data for availability status distribution - uses total counts"""
-    # Get total counts without filters (same query as summary)
-    query = """
-        SELECT 
-            va.availability_status as status,
-            COUNT(*) as count
-        FROM 
-            `tabVehicle Entry` ve
-        LEFT JOIN 
-            `tabVehicle Availability` va ON ve.chassis_number = va.chassis_number 
-            AND va.docstatus = 1
-        WHERE 
-            ve.docstatus IN (0, 1, 2)
-        GROUP BY 
-            va.availability_status
-        ORDER BY 
-            count DESC
-    """
-    
-    result = frappe.db.sql(query, as_dict=1)
-    
-    if not result:
-        return None
-    
-    labels = [row['status'] for row in result]
-    values = [row['count'] for row in result]
-    
-    return {
-        "data": {
-            "labels": labels,
-            "datasets": [{
-                "name": "Vehicle Distribution",
-                "values": values
-            }]
-        },
-        "type": "donut",
-        "height": 300
-    }

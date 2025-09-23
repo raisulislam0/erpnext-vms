@@ -118,7 +118,6 @@
   {
    "allow_on_submit": 1,
    "bold": 1,
-   "columns": 7,
    "fieldname": "chassis_number",
    "fieldtype": "Link",
    "in_filter": 1,
@@ -126,11 +125,9 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Chassis Number",
-   "max_height": "2px",
    "options": "Vehicle Entry",
    "placeholder": "Select Chassis Number",
-   "reqd": 1,
-   "width": "10px"
+   "reqd": 1
   },
   {
    "fieldname": "column_break_tejs",
@@ -247,7 +244,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-22 11:21:40.195528",
+ "modified": "2025-09-23 09:58:50.788311",
  "modified_by": "Administrator",
  "module": "Vehicle Management",
  "name": "Vehicle Price",

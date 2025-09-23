@@ -1,8 +1,10 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import money_in_words
+import math
+
 
 class VehiclePrice(Document):
+    
     def validate(self):
         total_qty = 0
         total_amt = 0
@@ -26,9 +28,61 @@ class VehiclePrice(Document):
         self.sale_price = (self.company_price or 0) + (self.customer_price or 0)
         self.grand_total = (self.sale_price or 0) + (self.total_amount or 0)
 
+        def money_in_indian_words(number):
+            """
+            Convert number into words using Indian numbering system (Lakh, Crore).
+            """
+
+            def num_to_words(n):
+                ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+                        "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+                        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+                tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty",
+                        "Sixty", "Seventy", "Eighty", "Ninety"]
+
+                if n < 20:
+                    return ones[n]
+                elif n < 100:
+                    return tens[n // 10] + (" " + ones[n % 10] if (n % 10) != 0 else "")
+                elif n < 1000:
+                    return ones[n // 100] + " Hundred" + (" " + num_to_words(n % 100) if (n % 100) != 0 else "")
+                return ""
+
+            def convert_to_indian(n):
+                out = ""
+                crore = n // 10000000
+                n %= 10000000
+                lakh = n // 100000
+                n %= 100000
+                thousand = n // 1000
+                n %= 1000
+                hundred = n
+
+                if crore:
+                    out += num_to_words(crore) + " Crore "
+                if lakh:
+                    out += num_to_words(lakh) + " Lakh "
+                if thousand:
+                    out += num_to_words(thousand) + " Thousand "
+                if hundred:
+                    out += num_to_words(hundred)
+
+                return out.strip()
+
+            rupees = int(math.floor(number))
+            paise = int(round((number - rupees) * 100))
+
+            words = ""
+            if rupees:
+                words += convert_to_indian(rupees) + " Taka"
+            if paise:
+                words += " and " + convert_to_indian(paise) + " Paisa"
+
+            return words + " Only"
+
+
         try:
-            currency = getattr(self, 'currency', None) or frappe.db.get_default('currency') or 'USD'
-            self.in_words = money_in_words(self.grand_total, currency)
+            self.in_words = money_in_indian_words(self.grand_total)
         except Exception:
             self.in_words = ''
 
@@ -43,7 +97,8 @@ class VehiclePrice(Document):
             if chassis_exists:
                 frappe.throw(f"Vehicle Price for Chassis Number {self.chassis_number} already exists.")
                 return
-            
+
+
     def on_submit(self):
         self.update_vehicle_entry_status()
         self.reload()
