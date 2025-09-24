@@ -97,21 +97,30 @@ class VehiclePrice(Document):
             if chassis_exists:
                 frappe.throw(f"Vehicle Price for Chassis Number {self.chassis_number} already exists.")
                 return
+    
 
 
     def on_submit(self):
         self.update_vehicle_entry_status()
-        self.reload()
+        
+        avail_id = frappe.db.get_value("Vehicle Availability", 
+            {"chassis_number": self.chassis_number, "docstatus": 1})
 
+        if avail_id:
+            self.db_set("availability_id", avail_id)
+        
+        self.reload() # Not recommended to call reload() here, but if needed, ensure it's after all updates
+
+            
     def on_cancel(self):
         self.update_vehicle_entry_status()
         self.reload()
+
 
     def update_vehicle_entry_status(self):
         if self.chassis_number:
             from vehicle_management.vehicle_management.doctype.vehicle_entry.vehicle_entry import update_vehicle_entry_status
             update_vehicle_entry_status(self)
-            self.reload()
 
     def before_save(self):
         if self.docstatus == 0:

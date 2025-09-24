@@ -40,7 +40,6 @@ frappe.ui.form.on('Vehicle Availability', {
                 ]
             };
         });
-        update_totals(frm);
     },
 
     before_save: function (frm) {

@@ -67,8 +67,7 @@ frappe.ui.form.on('Vehicle Price', {
 
 frappe.ui.form.on('Vehicle Price Items', {
     item: function (frm, cdt, cdn) {
-        let row = locals[cdt][cdn];
-        if (!row) return;
+        let row = frappe.get_doc(cdt, cdn);
 
         // check duplicates
         let duplicates = (frm.doc.vehicle_items || []).filter(r => r.item === row.item);
@@ -86,10 +85,17 @@ frappe.ui.form.on('Vehicle Price Items', {
     rate: function (frm, cdt, cdn) {
         calculate_amount(frm, cdt, cdn);
     },
+
+    vehicle_items_add: function (frm) {
+        update_totals(frm);
+    },
     vehicle_items_remove: function (frm) {
         update_totals(frm);
     }
 });
+
+
+// Function definitions
 
 function calculate_amount(frm, cdt, cdn) {
     let row = frappe.get_doc(cdt, cdn);
@@ -120,9 +126,11 @@ function fetch_availability(frm) {
             let availability = r[0];
             frm.set_value("availability_status", availability.availability_status);
             frm.set_value("availability_details", format_availability_details(availability));
+           
         } else {
             frm.set_value("availability_status", "");
             frm.set_value("availability_details", "");
+     
         }
     });
 }

@@ -27,11 +27,12 @@ class VehicleAvailability(Document):
 
 	def on_submit(self):
 		self.update_vehicle_entry_status()
-		self.reload()
+		self.reload() # Not recommended to call reload() here, but if needed, ensure it's after all updates
 
 	def on_cancel(self):
 		self.update_vehicle_entry_status()
 		self.reload()
+
 
 	def update_vehicle_entry_status(self):
 		if self.chassis_number:

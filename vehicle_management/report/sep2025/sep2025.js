@@ -2,16 +2,6 @@
 // For license information, please see license.txt
 
 frappe.query_reports["Sep2025"] = {
-	"onload": function(report) {
-		// Add custom buttons
-		report.page.add_inner_button(__("Export to Excel"), function() {
-			frappe.utils.csvDownload(report.data, report.columns, __("Sep2025_Report"));
-		});
-		
-		report.page.add_inner_button(__("Print"), function() {
-			frappe.utils.print_table(report.data, report.columns, __("Sep2025 Report"));
-		});
-	},
 
 	"filters": [
 		{
@@ -117,30 +107,14 @@ frappe.query_reports["Sep2025"] = {
 				value = `<span class="indicator blue">${value}</span>`;
 			} else if (value == "Completed") {
 				value = `<span class="indicator green">${value}</span>`;
-			} else if (value == "Cancelled") {
-				value = `<span class="indicator red">${value}</span>`;
-			}
-			else if (value == "To Availability") {
+			} else if (value == "To Availability") {
 				value = `<span class="indicator brown">${value}</span>`;
-			}
-			else if (value == "Pending Price") {
+			} else if (value == "Pending Price") {
 				value = `<span class="indicator purple">${value}</span>`;
 			}
 		}
 		
 		return value;
 	},
-	
-	"onload": function(report) {
-		// Add custom buttons
-		report.page.add_inner_button(__("Export to Excel"), function() {
-			frappe.utils.csvDownload(report.data, report.columns, __("Sep2025_Report"));
-		});
-		
-		report.page.add_inner_button(__("Print"), function() {
-			frappe.utils.print_table(report.data, report.columns, __("Sep2025 Report"));
-		});
-	},
-
 
 };
